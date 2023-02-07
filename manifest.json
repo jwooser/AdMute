@@ -1,13 +1,10 @@
 {
-    "manifest_version": 2,
+    "manifest_version": 3,
   
     "name": "AdMute",
     "description": "Mutes ads on YouTube",
     "version": "0.0.1",
     "author": "Jerry Wu",
-    "browser_action": {
-      "default_title": "AdMute"
-    },
     "content_scripts": [
       {
         "matches": ["*://www.youtube.com/*"],
@@ -17,12 +14,14 @@
       }
     ],
     "background": {
-      "scripts": ["background.js"]
+      "service_worker": "background.js"
     },
     "permissions": [
       "tabs",
-      "*://www.youtube.com/*",
       "webNavigation",
       "storage"
+    ],
+    "host_permissions": [
+      "*://www.youtube.com/*"
     ]
   }
