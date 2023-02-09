@@ -1,10 +1,14 @@
-chrome.runtime.onMessage.addListener(
-    function(req, sender, sendResponse) {
-        if (req.action == 'restart') {
-            waitForVideo();
-        }
+chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
+    if (req.action == 'restart') {
+        waitForVideo();
     }
-);
+    else if (req.action == "enable") {
+        toggleMute()
+    }
+    else if (req.action == "disable") {
+        chrome.runtime.sendMessage({action: 'unmute'});
+    }
+});
 
 function isAdPlaying() {
     const mainVideo = document.getElementById("movie_player");
@@ -14,13 +18,21 @@ function isAdPlaying() {
     return false;
 }
 
-function onPlay() {
+function toggleMute() {
     if (isAdPlaying()) {
         chrome.runtime.sendMessage({action: 'mute'});
     } else {
         chrome.runtime.sendMessage({action: 'unmute'});
     }
-    
+}
+
+function onPlay() {
+    chrome.storage.local.get({enabled: true}).then((item) => {
+        if (!item.enabled) {
+            return;
+        }
+        toggleMute()
+    });
 }
 
 function run() {
