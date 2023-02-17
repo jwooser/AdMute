@@ -19,6 +19,16 @@ chrome.webNavigation.onHistoryStateUpdated.addListener((details) => {
     }
 });
 
+chrome.runtime.onStartup.addListener(function() {
+    chrome.storage.local.get({enabled: true}).then((item) => {
+        if (item.enabled) {
+            chrome.action.setIcon({path: 'icons/enabled/icon48.png'});
+        } else {
+            chrome.action.setIcon({path: 'icons/disabled/icon48.png'});
+        }
+    });
+});
+
 chrome.action.onClicked.addListener((tab) => {
     chrome.storage.local.get({enabled: true}).then((item) => {
         const isEnabled = !item.enabled;
